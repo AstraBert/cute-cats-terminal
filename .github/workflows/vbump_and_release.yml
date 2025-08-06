@@ -33,7 +33,7 @@ jobs:
           node-version-file: "ts/cute_cats_terminal/.nvmrc"
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
 
       - name: Add auth token to .npmrc file
         run: |
