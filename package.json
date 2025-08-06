@@ -7,10 +7,10 @@
     "pre-commit-version": "pnpm changeset",
     "version": "pnpm version-ts && pnpm version-py",
     "release": "pnpm release-ts && pnpm release-py",
-    "release-ts": "echo 'new version' > version.txt && pnpm run --filter cute-cats-terminal release",
-    "release-py": "echo 'new version' > version.txt && pnpm run --filter @cute_cats_terminal/py release",
-    "version-ts": "echo 'new version' > version.txt && pnpm run --filter cute-cats-terminal version",
-    "version-py": "echo 'new version' > version.txt && pnpm run --filter @cute_cats_terminal/py version"
+    "release-ts": "pnpm run --filter cute-cats-terminal release",
+    "release-py": "pnpm run --filter @cute_cats_terminal/py release",
+    "version-ts": "pnpm run --filter cute-cats-terminal version",
+    "version-py": "pnpm run --filter @cute_cats_terminal/py version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
