@@ -84,7 +84,7 @@ jobs:
               (steps.get-changeset-status.outputs.has_py_package == 'true' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm version') ||
               (steps.get-changeset-status.outputs.has_py_package == 'true' && steps.get-changeset-status.outputs.has_ts_package == 'false' && 'pnpm version-py') ||
               (steps.get-changeset-status.outputs.has_py_package == 'false' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm version-ts') ||
-              'pnpm new-version'
+              'pnpm version'
             }}
           publish: |
             ${{
