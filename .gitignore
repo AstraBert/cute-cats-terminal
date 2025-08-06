@@ -18,6 +18,7 @@ node_modules/
 
 # env variables
 .env
+.npmrc
 
 # macOS specific files
 .DS_Store
