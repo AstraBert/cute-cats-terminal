@@ -1,0 +1,14 @@
+{
+  "name": "@cute_terminal_cats/py",
+  "version": "0.0.0",
+  "private": "true",
+  "license": "MIT",
+  "scripts": {
+    "version": "cd .. && pnpm changeset version && bash py/scripts/new_version.sh",
+    "release": "bash scripts/release.sh"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.5",
+    "changesets": "^1.0.2"
+  }
+}

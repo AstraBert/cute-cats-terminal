@@ -1,0 +1,23 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+*_cache/
+
+# Virtual environments
+.venv
+
+# python version
+.python-version
+
+# pnpm generated files
+node_modules/
+
+# env variables
+.env
+
+# macOS specific files
+.DS_Store
