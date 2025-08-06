@@ -1,5 +1,5 @@
 {
-  "name": "llama_cloud_services",
+  "name": "cute-cats-terminal",
   "version": "1.0.0",
   "private": "true",
   "license": "MIT",
@@ -7,10 +7,10 @@
     "pre-commit-version": "pnpm changeset",
     "version": "pnpm version-ts && pnpm version-py",
     "release": "pnpm release-ts && pnpm release-py",
-    "release-ts": "pnpm run --filter llama-cloud-services release",
-    "release-py": "pnpm run --filter @llama_cloud_services/py release",
-    "version-ts": "pnpm run --filter llama-cloud-services version",
-    "version-py": "pnpm run --filter @llama_cloud_services/py version"
+    "release-ts": "pnpm run --filter cute-cats-terminal release",
+    "release-py": "pnpm run --filter @cute_cats_terminal/py release",
+    "version-ts": "pnpm run --filter cute-cats-terminal version",
+    "version-py": "pnpm run --filter @cute_cats_terminal/py version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",
