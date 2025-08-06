@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: "ts/.nvmrc"
+          node-version-file: "ts/cute_cats_terminal/.nvmrc"
 
       - name: Install dependencies
         run: pnpm install
