@@ -60,16 +60,16 @@ jobs:
           # Execute the appropriate version command
           if [[ $has_py_package == "true" && $has_ts_package == "true" ]]; then
             echo "Versioning both Python and TypeScript packages"
-            pnpm version
+            pnpm run version
           elif [[ $has_py_package == "true" && $has_ts_package == "false" ]]; then
             echo "Versioning Python package only"
-            pnpm version-py
+            pnpm run version-py
           elif [[ $has_py_package == "false" && $has_ts_package == "true" ]]; then
             echo "Versioning TypeScript package only"
-            pnpm version-ts
+            pnpm run version-ts
           else
             echo "Versioning with default command"
-            pnpm version
+            pnpm run version
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
