@@ -1,6 +1,6 @@
 {
   "name": "cute-cats-terminal",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A package to print cute cats to terminal",
   "main": "dist/index.js",
   "type": "commonjs",
