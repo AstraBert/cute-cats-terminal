@@ -38,44 +38,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Version packages based on changesets
-        run: |
-          pnpm changeset status --output .changeset/status.json
-          new_package=$(jq -r '.changesets[0].releases[0].name' < .changeset/status.json)
-          new_package1=$(jq -r '.changesets[0].releases[1].name' < .changeset/status.json)
-          rm -v .changeset/status.json
-
-          # Determine which packages are being released
-          has_py_package=false
-          has_ts_package=false
-
-          if [[ $new_package == "@llama_cloud_services/py" ]] || [[ $new_package1 == "@llama_cloud_services/py" ]]; then
-            has_py_package=true
-          fi
-
-          if [[ $new_package == "llama-cloud-services" ]] || [[ $new_package1 == "llama-cloud-services" ]]; then
-            has_ts_package=true
-          fi
-
-          # Execute the appropriate version command
-          if [[ $has_py_package == "true" && $has_ts_package == "true" ]]; then
-            echo "Versioning both Python and TypeScript packages"
-            pnpm run version
-          elif [[ $has_py_package == "true" && $has_ts_package == "false" ]]; then
-            echo "Versioning Python package only"
-            pnpm run version-py
-          elif [[ $has_py_package == "false" && $has_ts_package == "true" ]]; then
-            echo "Versioning TypeScript package only"
-            pnpm run version-ts
-          else
-            echo "Versioning with default command"
-            pnpm run version
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
+        with:
+          version: pnpm run version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
