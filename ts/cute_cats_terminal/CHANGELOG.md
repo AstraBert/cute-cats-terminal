@@ -1,5 +1,11 @@
 # cute-cats-terminal
 
+## 0.3.0
+
+### Minor Changes
+
+- f435dd5: Added emojis
+
 ## 0.2.0
 
 ### Minor Changes
