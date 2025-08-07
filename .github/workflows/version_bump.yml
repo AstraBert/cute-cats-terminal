@@ -38,45 +38,45 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Get changeset status
-        id: get-changeset-status
+      - name: Version packages based on changesets
         run: |
           pnpm changeset status --output .changeset/status.json
           new_package=$(jq -r '.changesets[0].releases[0].name' < .changeset/status.json)
           new_package1=$(jq -r '.changesets[0].releases[1].name' < .changeset/status.json)
           rm -v .changeset/status.json
+          rm -rf .changeset/*-*-*.md
 
-          if [[ $new_package1 == "null" ]]; then
-            echo "new_package=${new_package}" >> "$GITHUB_OUTPUT"
-            echo "package_count=1" >> "$GITHUB_OUTPUT"
-          else
-            echo "new_package=${new_package} and ${new_package1}" >> "$GITHUB_OUTPUT"
-            echo "package_count=2" >> "$GITHUB_OUTPUT"
-          fi
+          # Determine which packages are being released
+          has_py_package=false
+          has_ts_package=false
 
-          # Set individual package flags for conditional logic
           if [[ $new_package == "@llama_cloud_services/py" ]] || [[ $new_package1 == "@llama_cloud_services/py" ]]; then
-            echo "has_py_package=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_py_package=false" >> "$GITHUB_OUTPUT"
+            has_py_package=true
           fi
 
           if [[ $new_package == "llama-cloud-services" ]] || [[ $new_package1 == "llama-cloud-services" ]]; then
-            echo "has_ts_package=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_ts_package=false" >> "$GITHUB_OUTPUT"
+            has_ts_package=true
           fi
+
+          # Execute the appropriate version command
+          if [[ $has_py_package == "true" && $has_ts_package == "true" ]]; then
+            echo "Versioning both Python and TypeScript packages"
+            pnpm version
+          elif [[ $has_py_package == "true" && $has_ts_package == "false" ]]; then
+            echo "Versioning Python package only"
+            pnpm version-py
+          elif [[ $has_py_package == "false" && $has_ts_package == "true" ]]; then
+            echo "Versioning TypeScript package only"
+            pnpm version-ts
+          else
+            echo "Versioning with default command"
+            pnpm version
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
-        with:
-          version: |
-            ${{
-              (steps.get-changeset-status.outputs.has_py_package == 'true' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm version') ||
-              (steps.get-changeset-status.outputs.has_py_package == 'true' && steps.get-changeset-status.outputs.has_ts_package == 'false' && 'pnpm version-py') ||
-              (steps.get-changeset-status.outputs.has_py_package == 'false' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm version-ts') ||
-              'pnpm version'
-            }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
