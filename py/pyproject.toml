@@ -7,7 +7,7 @@ dev = [ "mypy>=1.17.1", "pre-commit>=4.2.0", "pytest>=8.4.1", "ruff>=0.12.7",]
 
 [project]
 name = "cute-cats-terminal"
-version = "0.2.0"
+version = "0.3.0"
 description = "A package to print cute cats to terminal"
 readme = "README.md"
 requires-python = ">=3.9,<4"
