@@ -25,7 +25,7 @@ COLORS = [
 
 
 def print_one(
-    cat_number: Literal[0, 1, 2, 3, 4],
+    cat_number: Literal[0, 1, 2, 3, 4, 5],
     color: Optional[
         Literal[
             "black",

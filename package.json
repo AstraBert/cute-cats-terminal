@@ -8,9 +8,9 @@
     "version": "pnpm version-ts && pnpm version-py",
     "release": "pnpm release-ts && pnpm release-py",
     "release-ts": "pnpm run --filter cute-cats-terminal release",
-    "release-py": "pnpm run --filter @cute_cats_terminal/py release",
+    "release-py": "pnpm run --filter @cute-cats-terminal/py release",
     "version-ts": "pnpm run --filter cute-cats-terminal version",
-    "version-py": "pnpm run --filter @cute_cats_terminal/py version"
+    "version-py": "pnpm run --filter @cute-cats-terminal/py version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.5",

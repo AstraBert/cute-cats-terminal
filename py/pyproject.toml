@@ -3,35 +3,25 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [dependency-groups]
-dev = [
-  "mypy>=1.17.1",
-  "pre-commit>=4.2.0",
-  "pytest>=8.4.1",
-  "ruff>=0.12.7"
-]
+dev = ["mypy>=1.17.1", "pre-commit>=4.2.0", "pytest>=8.4.1", "ruff>=0.12.7"]
 
 [project]
 name = "cute-cats-terminal"
-version = "0.0.0"
+version = "0.1.0"
 description = "A package to print cute cats to terminal"
 readme = "README.md"
 requires-python = ">=3.9,<4"
-dependencies = [
-  "termcolor>=3.1.0"
-]
+dependencies = ["termcolor>=3.1.0"]
 
 [tool.hatch.build.targets.wheel]
 only-include = ["cute_cats_terminal"]
 
 [tool.hatch.build.targets.wheel.sources]
-"src" = ""
+src = ""
 
 [tool.mypy]
 disable_error_code = ["import-not-found", "import-untyped"]
 
 [tool.pytest.ini_options]
 pythonpath = ["cute_cats_terminal"]
-addopts = [
-  "-v",
-  "--tb=short"
-]
+addopts = ["-v", "--tb=short"]

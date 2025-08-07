@@ -41,7 +41,6 @@ jobs:
             //registry.npmjs.org/:_authToken=$NPM_TOKEN
           EOF
 
-          echo "new version" > version.txt
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -52,6 +51,7 @@ jobs:
           new_package=$(jq -r '.changesets[0].releases[0].name' < .changeset/status.json)
           new_package1=$(jq -r '.changesets[0].releases[1].name' < .changeset/status.json)
           rm -v .changeset/status.json
+          rm -rf .changeset/*-*-*.md
 
           if [[ $new_package1 == "null" ]]; then
             echo "new_package=${new_package}" >> "$GITHUB_OUTPUT"
