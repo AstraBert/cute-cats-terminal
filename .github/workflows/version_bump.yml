@@ -44,7 +44,6 @@ jobs:
           new_package=$(jq -r '.changesets[0].releases[0].name' < .changeset/status.json)
           new_package1=$(jq -r '.changesets[0].releases[1].name' < .changeset/status.json)
           rm -v .changeset/status.json
-          rm -rf .changeset/*-*-*.md
 
           # Determine which packages are being released
           has_py_package=false
