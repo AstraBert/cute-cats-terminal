@@ -1,5 +1,11 @@
 # @cute-cats-terminal/py
 
+## 0.2.0
+
+### Minor Changes
+
+- 09d2d80: Added new cats
+
 ## 0.1.2
 
 ### Patch Changes
