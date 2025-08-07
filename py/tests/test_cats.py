@@ -17,7 +17,7 @@ def test_print_one(indexes: List[int]):
     with pytest.raises(ValueError):
         print_one(cat_number=0, color="car")  # type: ignore
     with pytest.raises(IndexError):
-        print_one(cat_number=6, color="blue")  # type: ignore
+        print_one(cat_number=12, color="blue")  # type: ignore
 
 
 def test_print_random(indexes: List[int]):

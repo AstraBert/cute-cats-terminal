@@ -11,56 +11,30 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
     # Only run if this is a merge commit and the PR was authored by github-actions[bot]
-    if: ${{ github.event.head_commit.message != null && startsWith(github.event.head_commit.message, 'Merge pull request') }}
+    if: ${{ github.event.head_commit.message != null && startsWith(github.event.head_commit.message, 'Merge pull request') && endsWith(github.event.head_commit.message, '/changeset-release/main') }}
     steps:
-      - name: Check if PR was authored by github-actions[bot]
-        id: check-pr-author
-        run: |
-          # Extract PR number from merge commit message
-          PR_NUMBER=$(echo "${{ github.event.head_commit.message }}" | grep -o '#[0-9]\+' | sed 's/#//')
-          echo "PR number: $PR_NUMBER"
-
-          # Get PR details
-          PR_AUTHOR=$(gh pr view $PR_NUMBER --json author --jq '.author.login')
-          echo "PR author: $PR_AUTHOR"
-
-          if [[ "$PR_AUTHOR" == "github-actions[bot]" ]]; then
-            echo "PR was authored by github-actions[bot], proceeding with publish"
-            echo "should_publish=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "PR was not authored by github-actions[bot], skipping publish"
-            echo "should_publish=false" >> "$GITHUB_OUTPUT"
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout Repo
         uses: actions/checkout@v4
-        if: steps.check-pr-author.outputs.should_publish == 'true'
 
       - uses: pnpm/action-setup@v3
         with:
           version: 10
-        if: steps.check-pr-author.outputs.should_publish == 'true'
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-        if: steps.check-pr-author.outputs.should_publish == 'true'
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3
-        if: steps.check-pr-author.outputs.should_publish == 'true'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version-file: "ts/cute_cats_terminal/.nvmrc"
-        if: steps.check-pr-author.outputs.should_publish == 'true'
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-        if: steps.check-pr-author.outputs.should_publish == 'true'
 
       - name: Add auth token to .npmrc file
         run: |
@@ -69,53 +43,10 @@ jobs:
           EOF
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: steps.check-pr-author.outputs.should_publish == 'true'
 
       - name: Publish packages based on changesets
-        if: steps.check-pr-author.outputs.should_publish == 'true'
         run: |
-          # Check if there are any packages that need to be published
-          if pnpm changeset status --output .changeset/status.json; then
-            new_package=$(jq -r '.changesets[0].releases[0].name' < .changeset/status.json)
-            new_package1=$(jq -r '.changesets[0].releases[1].name' < .changeset/status.json)
-            rm -v .changeset/status.json
-
-            if [[ $new_package == "null" ]]; then
-              echo "No packages to publish"
-              exit 0
-            else
-              echo "Publishing packages..."
-
-              # Determine which packages are being released
-              has_py_package=false
-              has_ts_package=false
-
-              if [[ $new_package == "@llama_cloud_services/py" ]] || [[ $new_package1 == "@llama_cloud_services/py" ]]; then
-                has_py_package=true
-              fi
-
-              if [[ $new_package == "llama-cloud-services" ]] || [[ $new_package1 == "llama-cloud-services" ]]; then
-                has_ts_package=true
-              fi
-
-              # Execute the appropriate publish command
-              if [[ $has_py_package == "true" && $has_ts_package == "true" ]]; then
-                echo "Publishing both Python and TypeScript packages"
-                pnpm release
-              elif [[ $has_py_package == "true" && $has_ts_package == "false" ]]; then
-                echo "Publishing Python package only"
-                pnpm release-py
-              elif [[ $has_py_package == "false" && $has_ts_package == "true" ]]; then
-                echo "Publishing TypeScript package only"
-                pnpm release-ts
-              else
-                echo "Publishing with default command"
-                pnpm release
-              fi
-            fi
-          else
-            echo "No changeset status available, skipping publish"
-          fi
+          pnpm run release
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
