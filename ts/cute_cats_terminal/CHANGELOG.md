@@ -1,5 +1,11 @@
 # cute-cats-terminal
 
+## 0.1.2
+
+### Patch Changes
+
+- b3a181c: Test patch vbump
+
 ## 0.1.1
 
 ### Patch Changes
