@@ -11,3 +11,8 @@ export type RandomCatOutput = {
   cat: string;
   index: number;
 };
+
+export type CatEmojiParams = {
+  description: string;
+  color: string;
+};

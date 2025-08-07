@@ -1,7 +1,8 @@
 import { expect, describe, it } from "@jest/globals";
-import { printOne, printRandom } from "./utils";
+import { printOne, printRandom, printEmoji, emojis } from "./utils";
 import { CATS } from "./cats";
-import type { CatParams, RandomCatParams } from "./type";
+import { EMOJI_DICT } from "./emojis";
+import type { CatParams, RandomCatParams, CatEmojiParams } from "./type";
 
 describe("cute-terminal-cats tests", () => {
   it("print a specific cat", () => {
@@ -16,6 +17,16 @@ describe("cute-terminal-cats tests", () => {
     for (let i = 0; i < 5; i++) {
       const cat = printRandom({ color: "red" } as RandomCatParams);
       expect(cat.cat === CATS[cat.index]).toBeTruthy();
+    }
+  });
+
+  it("print an emoji", () => {
+    for (const emoji of emojis) {
+      const cat = printEmoji({
+        description: emoji,
+        color: "red",
+      } as CatEmojiParams);
+      expect(cat === EMOJI_DICT[emoji]).toBeTruthy();
     }
   });
 });
