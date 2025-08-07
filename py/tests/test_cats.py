@@ -2,7 +2,8 @@ import pytest
 from typing import List
 
 from cute_cats_terminal._cats import CATS
-from cute_cats_terminal._print import print_one, print_random
+from cute_cats_terminal._print import print_one, print_random, print_emoji
+from cute_cats_terminal._emojis import EMOJI_DICT
 
 
 @pytest.fixture()
@@ -26,3 +27,13 @@ def test_print_random(indexes: List[int]):
         assert cat == CATS[idx]
     with pytest.raises(ValueError):
         print_random(color="car")  # type: ignore
+
+
+def test_print_emoji():
+    for key in EMOJI_DICT:
+        cat = print_emoji(description=key)  # type: ignore
+        assert cat == EMOJI_DICT[key]
+    with pytest.raises(ValueError):
+        print_emoji(description="blushing cat", color="car")  # type: ignore
+    with pytest.raises(KeyError):
+        print_emoji(description="blushing car", color="blue")  # type: ignore

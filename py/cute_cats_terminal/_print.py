@@ -3,6 +3,7 @@ import termcolor
 from typing import Literal, Optional, Tuple
 
 from ._cats import CATS
+from ._emojis import EMOJI_DICT
 
 COLORS = [
     "black",
@@ -22,6 +23,8 @@ COLORS = [
     "light_magenta",
     "light_cyan",
 ]
+
+EMOJIS_DES = list(EMOJI_DICT.keys())
 
 
 def print_one(
@@ -92,3 +95,42 @@ def print_random(
             )
         termcolor.cprint(CATS[n], color=color, attrs=["bold"])
     return n, CATS[n]
+
+
+def print_emoji(
+    description: Literal[
+        "playful cat", "waving cat", "sleepy cat", "shy cat", "blushing cat"
+    ],
+    color: Optional[
+        Literal[
+            "black",
+            "red",
+            "green",
+            "yellow",
+            "blue",
+            "magenta",
+            "cyan",
+            "white",
+            "light_grey",
+            "dark_grey",
+            "light_red",
+            "light_green",
+            "light_yellow",
+            "light_blue",
+            "light_magenta",
+            "light_cyan",
+        ]
+    ] = None,
+) -> str:
+    if description not in EMOJIS_DES:
+        raise KeyError("'" + description + "' is not among the available emojis")
+    if not color:
+        termcolor.cprint(EMOJI_DICT[description], color="white", attrs=["bold"])
+    else:
+        if color not in COLORS:
+            raise ValueError(
+                f"Color {color} is not allowed, allowed colors are only:\n- "
+                + "\n- ".join(COLORS)
+            )
+        termcolor.cprint(EMOJI_DICT[description], color=color, attrs=["bold"])
+    return EMOJI_DICT[description]
