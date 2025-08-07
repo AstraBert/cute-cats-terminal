@@ -11,7 +11,7 @@ jobs:
     name: Publish
     runs-on: ubuntu-latest
     # Only run if this is a merge commit and the PR was authored by github-actions[bot]
-    if: ${{ github.event.head_commit.message != null && startsWith(github.event.head_commit.message, 'Merge pull request') && endsWith(github.event.head_commit.message, '/changeset-release/main') }}
+    if: ${{ github.event.head_commit.message != null && startsWith(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, '/changeset-release/main') }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
