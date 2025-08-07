@@ -1,4 +1,4 @@
-name: Version Bump and Release - Changeset
+name: Version Bump - Changeset
 
 on:
   push:
@@ -8,12 +8,15 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  release:
-    name: Release
+  version:
+    name: Version Bump
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+        with:
+          # Need to fetch full history for changesets
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v3
         with:
@@ -35,15 +38,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Add auth token to .npmrc file
-        run: |
-          cat << EOF >> ".npmrc"
-            //registry.npmjs.org/:_authToken=$NPM_TOKEN
-          EOF
-
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Get changeset status
         id: get-changeset-status
         run: |
@@ -51,7 +45,6 @@ jobs:
           new_package=$(jq -r '.changesets[0].releases[0].name' < .changeset/status.json)
           new_package1=$(jq -r '.changesets[0].releases[1].name' < .changeset/status.json)
           rm -v .changeset/status.json
-          rm -rf .changeset/*-*-*.md
 
           if [[ $new_package1 == "null" ]]; then
             echo "new_package=${new_package}" >> "$GITHUB_OUTPUT"
@@ -74,13 +67,10 @@ jobs:
             echo "has_ts_package=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Create Release Pull Request or Publish to npm
+      - name: Create Release Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
-          commit: Releasing ${{ steps.get-changeset-status.outputs.new_package }}
-          title: Releasing ${{ steps.get-changeset-status.outputs.new_package }}
-          # Conditional version and publish commands based on packages
           version: |
             ${{
               (steps.get-changeset-status.outputs.has_py_package == 'true' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm version') ||
@@ -88,14 +78,5 @@ jobs:
               (steps.get-changeset-status.outputs.has_py_package == 'false' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm version-ts') ||
               'pnpm version'
             }}
-          publish: |
-            ${{
-              (steps.get-changeset-status.outputs.has_py_package == 'true' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm release') ||
-              (steps.get-changeset-status.outputs.has_py_package == 'true' && steps.get-changeset-status.outputs.has_ts_package == 'false' && 'pnpm release-py') ||
-              (steps.get-changeset-status.outputs.has_py_package == 'false' && steps.get-changeset-status.outputs.has_ts_package == 'true' && 'pnpm release-ts') ||
-              'pnpm release'
-            }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
