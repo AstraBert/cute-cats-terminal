@@ -28,7 +28,7 @@ EMOJIS_DES = list(EMOJI_DICT.keys())
 
 
 def print_one(
-    cat_number: Literal[0, 1, 2, 3, 4, 5],
+    cat_number: Literal[0, 1, 2, 3, 4, 5, 6, 7],
     color: Optional[
         Literal[
             "black",
@@ -99,7 +99,12 @@ def print_random(
 
 def print_emoji(
     description: Literal[
-        "playful cat", "waving cat", "sleepy cat", "shy cat", "blushing cat"
+        "playful cat",
+        "waving cat",
+        "sleepy cat",
+        "shy cat",
+        "blushing cat",
+        "curious cat",
     ],
     color: Optional[
         Literal[
