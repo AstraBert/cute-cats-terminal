@@ -1,5 +1,11 @@
 # cute-cats-terminal
 
+## 0.3.1
+
+### Patch Changes
+
+- 119dbf6: Adding new cats emojis and arts
+
 ## 0.3.0
 
 ### Minor Changes
